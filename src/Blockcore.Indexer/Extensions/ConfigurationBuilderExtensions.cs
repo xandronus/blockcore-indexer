@@ -63,7 +63,7 @@ namespace Blockcore
             throw new ArgumentNullException("--chain", "You must specify the --chain argument. It can be either chain name, or URL to a json configuration.");
          }
 
-         if (args.Contains("--local"))
+         if (args.Any(i => i.StartsWith("--local")))
          {
             // Load your local custom blockchain settings.
             // --local  => uses CUSTOM.json
