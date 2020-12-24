@@ -66,10 +66,22 @@ namespace Blockcore
          if (args.Contains("--local"))
          {
             // Load your local custom blockchain settings.
-            builder.AddJsonFile("CUSTOM.json");
+            // --local  => uses CUSTOM.json
+            // --local=/myfolder/myfile.json  => uses specified file
+
+            string localFile = args
+               .DefaultIfEmpty("CUSTOM.json")
+               .Where(arg => arg.StartsWith("--local=", ignoreCase: true, CultureInfo.InvariantCulture))
+               .Select(arg => arg.Replace("--local=", string.Empty, ignoreCase: true, CultureInfo.InvariantCulture))
+               .FirstOrDefault();
+
+            Console.WriteLine("CHAIN: " + chain);
+            Console.WriteLine("SETUP: " + localFile);
+            builder.AddJsonFile(localFile);
          }
          else
          {
+            // Loads using HTTP URI
             Console.WriteLine("CHAIN: " + chain);
             string url = chain.Contains("/") ? chain : $"https://chains.blockcore.net/chains/{chain}.json";
             Console.WriteLine("SETUP: " + url);
