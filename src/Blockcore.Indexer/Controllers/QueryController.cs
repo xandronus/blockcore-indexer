@@ -211,6 +211,18 @@ namespace Blockcore.Indexer.Api.Handlers
       }
 
       /// <summary>
+      /// Returns blocks based on the offset and limit. The blocks are sorted from from lowest to highest index. You can use the "link" HTTP header to get dynamic paging links.
+      /// </summary>
+      /// <param name="offset">If value set to 0, then query will start from block tip, not from 1 (genesis).</param>
+      /// <param name="limit">Number of blocks to return. Maximum 50.</param>
+      [HttpGet]
+      [Route("block/all")]
+      public IActionResult GetAllBlocks([Range(0, int.MaxValue)] int offset = 0, [Range(1, long.MaxValue)] int limit = 10)
+      {
+         return OkPaging(storage.Blocks(offset, limit));
+      }
+
+      /// <summary>
       /// Returns richlist entries based on the offset and limit. The entries are sorted from from lowest to highest balance.
       /// </summary>
       [HttpGet]
